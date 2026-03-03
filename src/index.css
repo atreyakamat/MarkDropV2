@@ -87,7 +87,7 @@
 .dashboard-container {
   display: grid;
   grid-template-columns: auto 1fr;
-  min-h-screen;
+  min-height: 100vh;
   width: 100vw;
 }
 
