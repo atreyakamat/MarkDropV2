@@ -88,7 +88,6 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (bookmark) {
     chrome.notifications.create(bookmark.id, {
       type: 'basic',
-      iconUrl: '/icon.png',
       title: 'Time to revisit!',
       message: `You scheduled: ${bookmark.title}`,
       buttons: [{ title: 'Open Link' }],
