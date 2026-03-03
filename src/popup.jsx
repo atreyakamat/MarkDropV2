@@ -37,8 +37,8 @@ const Popup = () => {
 
       <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
         <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest text-white/30">
-          <span>Local Port</span>
-          <span className="text-indigo-400">9331</span>
+          <span>Mode</span>
+          <span className="text-indigo-400">Native Dashboard</span>
         </div>
         <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest text-white/30">
           <span>Status</span>
