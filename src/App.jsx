@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutGrid, List, Settings, Calendar, Search, Trash2, CheckCircle, Clock, ExternalLink, Moon, Sun, Layers, Menu, X as CloseIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { LayoutGrid, List, Settings, Calendar, Search, Trash2, CheckCircle, Clock, ExternalLink, Moon, Sun, Layers, Menu, X as CloseIcon, Undo2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getStorage, setStorage } from './utils/storage';
 import ScheduleModal from './components/ScheduleModal';
@@ -24,6 +24,64 @@ const GlassBackground = () => (
     <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
   </div>
 );
+
+const UndoToast = ({ bookmark, onUndo, onExpire, theme }) => {
+  const isNeo = theme === 'neo';
+  const [progress, setProgress] = useState(100);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev <= 0) {
+          clearInterval(timer);
+          onExpire();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <motion.div 
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-6 px-8 py-4 min-w-[400px] overflow-hidden ${
+        isNeo ? 'neo-card bg-white' : 'glass-card rounded-2xl border-white/20 bg-white/10'
+      }`}
+    >
+      <div className="flex-1">
+        <p className={`text-sm font-black mb-1 ${isNeo ? 'text-black' : 'text-white'}`}>
+          Deleted "{bookmark.title}"
+        </p>
+        <p className={`text-[10px] font-bold opacity-50 ${isNeo ? 'text-black' : 'text-white'}`}>
+          This can be undone within 10 seconds.
+        </p>
+      </div>
+      
+      <button 
+        onClick={onUndo}
+        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+          isNeo ? 'neo-button bg-neo-yellow' : 'bg-white text-black hover:bg-white/80'
+        }`}
+      >
+        <Undo2 size={14} /> Undo
+      </button>
+
+      {/* Progress Bar */}
+      <div className="absolute bottom-0 left-0 h-1 bg-current opacity-20 w-full" />
+      <motion.div 
+        className={`absolute bottom-0 left-0 h-1 ${isNeo ? 'bg-black' : 'bg-indigo-500'}`}
+        initial={{ width: "100%" }}
+        animate={{ width: `${progress}%` }}
+        transition={{ duration: 0.1, ease: "linear" }}
+      />
+    </motion.div>
+  );
+};
 
 const BookmarkCard = ({ bookmark, theme, onDelete, onMarkRead, onSchedule }) => {
   const isNeo = theme === 'neo';
@@ -75,7 +133,7 @@ const BookmarkCard = ({ bookmark, theme, onDelete, onMarkRead, onSchedule }) => 
         <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className={`p-2.5 rounded-2xl transition-all ${isNeo ? 'hover:bg-neo-blue border-3 border-transparent hover:border-black' : 'hover:bg-white/10 text-white/40 hover:text-white'}`}>
           <ExternalLink size={18} />
         </a>
-        <button onClick={() => onDelete(bookmark.id)} className={`p-2.5 rounded-2xl ml-auto transition-all ${isNeo ? 'hover:bg-red-400 border-3 border-transparent hover:border-black' : 'hover:bg-red-500/20 text-red-400'}`}>
+        <button onClick={() => onDelete(bookmark)} className={`p-2.5 rounded-2xl ml-auto transition-all ${isNeo ? 'hover:bg-red-400 border-3 border-transparent hover:border-black' : 'hover:bg-red-500/20 text-red-400'}`}>
           <Trash2 size={18} />
         </button>
       </div>
@@ -92,6 +150,8 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [pendingDeletion, setPendingDeletion] = useState(null);
+  const deleteTimeoutRef = useRef(null);
 
   const categories = ['All', 'Recent', 'Scheduled', 'Learning', 'Development', 'News', 'Entertainment', 'Shopping', 'Work', 'Research', 'Social'];
 
@@ -120,12 +180,38 @@ const App = () => {
 
   const toggleTheme = () => setTheme(prev => prev === 'glass' ? 'neo' : 'glass');
 
-  const handleDelete = async (id) => {
-    const updated = bookmarks.filter(b => b.id !== id);
-    setBookmarks(updated);
+  // Enhanced Delete with Undo Logic
+  const handleDelete = (bookmark) => {
+    // 1. Clear any existing pending deletions immediately
+    if (pendingDeletion) {
+      executePermanentDelete(pendingDeletion.id);
+    }
+
+    // 2. Hide from current view
+    setPendingDeletion(bookmark);
+    setBookmarks(prev => prev.filter(b => b.id !== bookmark.id));
+
+    // 3. Set timer for 10 seconds
+    deleteTimeoutRef.current = setTimeout(() => {
+      executePermanentDelete(bookmark.id);
+    }, 10000);
+  };
+
+  const executePermanentDelete = async (id) => {
+    const data = await getStorage(['bookmarks']);
+    const updated = (data.bookmarks || []).filter(b => b.id !== id);
     await setStorage({ bookmarks: updated });
     chrome.bookmarks.remove(id);
     chrome.alarms.clear(id);
+    setPendingDeletion(null);
+  };
+
+  const handleUndo = () => {
+    if (deleteTimeoutRef.current) {
+      clearTimeout(deleteTimeoutRef.current);
+    }
+    setBookmarks(prev => [...prev, pendingDeletion]);
+    setPendingDeletion(null);
   };
 
   const handleMarkRead = async (id) => {
@@ -250,6 +336,17 @@ const App = () => {
       </main>
 
       <ScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} bookmark={selectedBookmark} theme={theme} onSchedule={onSchedule} />
+      
+      <AnimatePresence>
+        {pendingDeletion && (
+          <UndoToast 
+            bookmark={pendingDeletion} 
+            theme={theme}
+            onUndo={handleUndo} 
+            onExpire={() => executePermanentDelete(pendingDeletion.id)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
