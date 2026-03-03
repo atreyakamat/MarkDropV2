@@ -1,6 +1,8 @@
 # MarkDrop V2 - Smart Bookmark Management Dashboard
 
-**MarkDrop V2** is not just a bookmark manager; it is a proactive knowledge dashboard for power users. It transforms your browser's static bookmark list into an intelligent, visually stunning workspace that helps you organize, revisit, and actually use the links you save.
+**MarkDrop V2** functions as an intelligent, visually structured bookmark operating system that transforms static browser bookmarks into an organized, interactive dashboard. Instead of simply listing saved links, the extension extracts all bookmarks using the Chrome Bookmarks API, processes them through a smart categorization engine that analyzes domains and keywords, and stores enhanced metadata locally. 
+
+These bookmarks are then rendered as beautifully designed cards within categorized sections, allowing users to search, filter, group related links, and interact with them dynamically. Each bookmark can be scheduled for future viewing, triggering Chrome alarms and notifications at the chosen time, ensuring important links are not forgotten. All logic runs entirely on-device using local storage and Chrome APIs, maintaining privacy while delivering a proactive, structured, and aesthetically refined bookmark management experience.
 
 ## 🚀 How It Works (The Dashboard Experience)
 
