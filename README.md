@@ -6,25 +6,25 @@ These bookmarks are then rendered as beautifully designed cards within categoriz
 
 ## 🚀 How It Works (The Dashboard Experience)
 
-Unlike traditional extensions that live in a tiny popup, **MarkDrop V2 operates as a full-page dashboard**. 
+MarkDrop V2 operates as a high-performance local dashboard triggered by a browser popup.
 
-1.  **Full-Page Tab**: Clicking the extension icon immediately opens the dashboard in a new, high-resolution tab. This gives you a wide-canvas workspace to manage your knowledge without squinting at a small menu.
-2.  **Auto-Intelligence**: The moment you save a bookmark in Chrome, MarkDrop's background engine analyzes it. It looks at the domain (e.g., `github.com` → `Development`) and keywords in the title (e.g., "tutorial" → `Learning`) to automatically categorize it.
-3.  **Proactive Reminders**: It solves the "save and forget" problem. You can schedule any link to reappear as a system notification later tonight, tomorrow, or over the weekend.
-4.  **Privacy First**: **Everything runs 100% locally.** There are no external servers, no tracking, and no data collection. Your bookmarks and habits never leave your machine.
+1.  **Extension Popup**: Click the MarkDrop V2 icon in your browser to open the launcher.
+2.  **Start Dashboard**: Click the "Start Dashboard" button. The extension will automatically sync your bookmarks and open a new tab at **`http://localhost:9331`**.
+3.  **Local Server**: The dashboard is served locally on port **9331**, providing a fast and private full-page experience.
+4.  **Auto-Intelligence**: Bookmarks are analyzed by domain and title keywords to automatically sort into categories like *Development*, *Learning*, etc.
+5.  **Proactive Reminders**: Schedule links to reappear as system notifications later.
 
 ## ✨ Core Features
 
 -   **🧠 Smart Categorization**: Automatic sorting into *Development*, *Learning*, *Entertainment*, *Shopping*, *Work*, *Research*, and *Social*.
--   **🌫 Glassmorphism Mode**: A premium, "frosted glass" aesthetic with silky-smooth Framer Motion animations and vibrant depth.
--   **🧱 Neobrutalism Mode**: A bold, high-contrast theme for those who prefer raw, energetic design.
--   **⏰ Scheduling Engine**: Integrated with `chrome.alarms` and `chrome.notifications` to keep you productive.
--   **🔗 Intelligent Clustering**: Toggle between a standard grid and a "Stacked" view that groups your knowledge by category for better mental mapping.
--   **🔍 Global Search**: Find any link instantly with a high-performance search bar.
+-   **🌫 Glassmorphism Mode**: A premium aesthetic with silky-smooth animations.
+-   **🧱 Neobrutalism Mode**: A bold, high-contrast theme.
+-   **⏰ Scheduling Engine**: Integrated with `chrome.alarms` and `chrome.notifications`.
+-   **🔗 Intelligent Clustering**: Toggle between standard grid and a "Stacked" view.
 
-## 🛠 Installation
+## 🛠 Installation & Running
 
-### 1. Build the Extension
+### 1. Build & Start the Server
 1. Clone this repository.
 2. Install dependencies:
    ```bash
@@ -34,21 +34,25 @@ Unlike traditional extensions that live in a tiny popup, **MarkDrop V2 operates 
    ```bash
    npm run build
    ```
-   *This creates a `dist` folder ready for Chrome.*
+4. **Start the local server**:
+   ```bash
+   npm run server
+   ```
+   *The dashboard will now be available at http://localhost:9331.*
 
-### 2. Load into Chrome
+### 2. Load the Extension into Chrome
 1. Open Chrome and navigate to `chrome://extensions/`.
 2. Enable **Developer mode** (top right toggle).
 3. Click **Load unpacked**.
 4. Select the **`dist`** folder.
-5. **Pin the extension**: Click the puzzle icon in Chrome and pin MarkDrop V2.
+5. Pin the extension and click "Start Dashboard"!
 
 ## 🏗 Tech Stack
 
 -   **Frontend**: React 18, Vite
--   **Styling**: Tailwind CSS (Custom Glass & Neo utility classes)
--   **Animations**: Framer Motion
--   **APIs**: Chrome Manifest V3 (Bookmarks, Alarms, Notifications, Storage, Tabs)
+-   **Server**: Node.js + Express (Port 9331)
+-   **Styling**: Tailwind CSS
+-   **APIs**: Chrome Manifest V3
 
 ## 🛡 License
 MIT - Created by Atreya Kamat.

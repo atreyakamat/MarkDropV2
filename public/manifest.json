@@ -11,7 +11,8 @@
     "tabs"
   ],
   "action": {
-    "default_title": "Open MarkDrop Dashboard"
+    "default_title": "Open MarkDrop Dashboard",
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js",

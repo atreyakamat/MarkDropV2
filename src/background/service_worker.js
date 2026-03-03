@@ -6,12 +6,22 @@ chrome.runtime.onInstalled.addListener(async () => {
   console.log('MarkDrop V2 Installed');
   await syncBookmarks();
   // Open dashboard on install
-  chrome.tabs.create({ url: 'index.html' });
+  chrome.tabs.create({ url: 'http://localhost:9331' });
 });
 
 // Open dashboard when clicking the extension icon
 chrome.action.onClicked.addListener(() => {
-  chrome.tabs.create({ url: 'index.html' });
+  chrome.tabs.create({ url: 'http://localhost:9331' });
+});
+
+// Listen for messages from popup
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "START_SYNC") {
+    syncBookmarks().then(() => {
+      // Open the local server URL
+      chrome.tabs.create({ url: "http://localhost:9331" });
+    });
+  }
 });
 
 // Sync bookmarks from Chrome
