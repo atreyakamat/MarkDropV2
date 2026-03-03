@@ -1,52 +1,51 @@
 # MarkDrop V2 - Smart Bookmark Management Dashboard
 
-**MarkDrop V2** functions as an intelligent, visually structured bookmark operating system that transforms static browser bookmarks into an organized, interactive dashboard. Instead of simply listing saved links, the extension extracts all bookmarks using the Chrome Bookmarks API, processes them through a smart categorization engine that analyzes domains and keywords, and stores enhanced metadata locally. 
+**MarkDrop V2** functions as an intelligent, visually structured bookmark operating system that transforms static browser bookmarks into an organized, interactive dashboard. This latest version introduces a **Zero-Server Architecture**, allowing the entire dashboard to run natively inside your browser with a single click—no terminal, Node.js server, or background processes required.
 
-These bookmarks are then rendered as beautifully designed cards within categorized sections, allowing users to search, filter, group related links, and interact with them dynamically. Each bookmark can be scheduled for future viewing, triggering Chrome alarms and notifications at the chosen time, ensuring important links are not forgotten. All logic runs entirely on-device using local storage and Chrome APIs, maintaining privacy while delivering a proactive, structured, and aesthetically refined bookmark management experience.
+## 🚀 The "One-Click" Flow
 
-## 🚀 The One-Click Experience (Native Dashboard)
+MarkDrop V2 is designed to be frictionless. Here is the exact flow of how it works:
 
-MarkDrop V2 is built for speed and simplicity. It runs **natively** inside your browser, meaning **no external server or terminal is required.**
+1.  **Click the Extension Icon**: Open the MarkDrop V2 launcher directly from your Chrome toolbar.
+2.  **Press "Start Dashboard"**: Clicking the button triggers an instant, high-speed synchronization of your existing Chrome bookmarks.
+3.  **Automatic Processing**: The internal engine processes every link, categorizing them into groups like *Development*, *Learning*, or *Social* based on intelligent domain and keyword mapping.
+4.  **Native Tab Launch**: A new browser tab opens automatically, serving the dashboard **natively** from the extension's internal files.
+5.  **Explore & Interact**: Your entire bookmark library is now a beautiful, interactive workspace. Search, filter, switch between Glassmorphism/Neobrutalism themes, or schedule reminders for later.
 
-1.  **Launch**: Click the MarkDrop V2 icon in your extension bar.
-2.  **Start**: Press the **"Start Dashboard"** button in the popup.
-3.  **Explore**: A full-page dashboard opens instantly in a new tab, showing your entire bookmark collection beautifully organized.
+## ✨ Why Zero-Server?
 
-## ✨ Core Features
+-   **Zero Configuration**: No need to run `npm run server` or manage local ports.
+-   **Instant Speed**: Dashboard loads directly from the browser's internal memory.
+-   **Total Privacy**: Data never leaves the browser environment; categorization and storage happen 100% on your device.
+-   **Persistent Sync**: Any bookmark you add to Chrome while the dashboard is open will appear in real-time.
 
--   **🧠 Smart Categorization**: Automatic sorting into *Development*, *Learning*, *Entertainment*, *Shopping*, *Work*, *Research*, and *Social*.
--   **🌫 Glassmorphism Mode**: A premium, "frosted glass" aesthetic with silky-smooth animations.
--   **🧱 Neobrutalism Mode**: A bold, high-contrast theme for those who prefer raw design.
--   **⏰ Scheduling Engine**: Set reminders for links using Chrome's native alarm system.
--   **🔗 Intelligent Clustering**: Toggle between standard grid and a "Stacked" view grouped by category.
+## 🛠 Installation & Setup
 
-## 🛠 Installation
-
-### 1. Build the Project
+### 1. Build the Extension
 1. Clone this repository.
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Build the extension:
+3. Generate the production build:
    ```bash
    npm run build
    ```
-   *This creates a `dist` folder.*
+   *This will create the `dist` folder which contains the entire "Operating System".*
 
 ### 2. Load into Chrome
 1. Open Chrome and navigate to `chrome://extensions/`.
-2. Enable **Developer mode** (top right).
+2. Enable **Developer mode** (top right toggle).
 3. Click **Load unpacked**.
-4. Select the **`dist`** folder.
-5. **Pin the extension** and click "Start Dashboard"!
+4. Select the **`dist`** folder from this project.
+5. **Pin the extension** for easy access.
 
 ## 🏗 Tech Stack
 
--   **Frontend**: React 18, Vite
--   **Styling**: Tailwind CSS
--   **Animations**: Framer Motion
--   **APIs**: Chrome Manifest V3 (Bookmarks, Alarms, Notifications, Storage)
+-   **UI**: React 18, Vite
+-   **Styling**: Tailwind CSS (Custom Glass & Neo systems)
+-   **Motion**: Framer Motion
+-   **Engine**: Chrome Manifest V3 (Bookmarks, Alarms, Notifications, Storage APIs)
 
 ## 🛡 License
 MIT - Created by Atreya Kamat.
