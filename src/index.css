@@ -4,95 +4,105 @@
 
 @layer base {
   :root {
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-bg: rgba(255, 255, 255, 0.015);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.12);
   }
 
   body {
     @apply m-0 p-0 antialiased overflow-x-hidden;
-    background-color: #0F172A;
+    background-color: #050810;
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { 
+    background: rgba(255, 255, 255, 0.05); 
+    border-radius: 10px; 
   }
 }
 
-/* Glassmorphism System */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
+/* --- High-Fidelity Glass System --- */
+
+.glass-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #0f172a 0%, #050810 100%);
 }
 
+/* Realistic Glass Card */
 .glass-card {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: var(--glass-shadow);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 4px 24px -1px rgba(0, 0, 0, 0.2),
+    inset 0 0 20px 0 rgba(255, 255, 255, 0.02);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+/* Glass Refraction Edge */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+  z-index: 1;
+}
+
+/* Glass Grain/Noise Texture */
+.glass-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Neobrutalism System */
+/* --- Floating Glass Particles --- */
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(100px, 50px) rotate(120deg); }
+  66% { transform: translate(-50px, 100px) rotate(240deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+.glass-particle {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  backdrop-filter: blur(5px);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  animation: float 20s infinite linear;
+  filter: blur(40px);
+}
+
+/* --- Neobrutalism (Unchanged but polished) --- */
 .neo-card {
   background: white;
-  border: 3px solid black;
-  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
-  transition: all 0.2s ease;
+  border: 4px solid black;
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 1);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .neo-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 1);
-}
-
-.neo-button {
-  background: #FFD700;
-  border: 3px solid black;
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-  transition: all 0.1s ease;
-}
-
-.neo-button:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
-}
-
-/* Layout Utilities */
-.dashboard-container {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  min-height: 100vh;
-  width: 100vw;
-}
-
-@media (max-width: 1024px) {
-  .dashboard-container {
-    grid-template-columns: 1fr;
-  }
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0px 0px rgba(0, 0, 0, 1);
 }
