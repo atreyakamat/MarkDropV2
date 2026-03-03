@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "MarkDrop V2",
+  "version": "2.0.0",
+  "description": "Smart Bookmark Management Dashboard",
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "alarms",
+    "notifications",
+    "tabs"
+  ],
+  "action": {
+    "default_title": "Open MarkDrop Dashboard"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "icons": {
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
